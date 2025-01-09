@@ -1,0 +1,103 @@
+.for {
+    max-width: 600px;
+    margin: 80px auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    background-color: #eceaea9d;
+}
+
+
+.for button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #8a8383;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.for button:hover {
+    color: #777272;
+}
+
+
+h2.addstd {
+    text-align: center;
+    color: #4caf50;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+input[type="text"] {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"] {
+    width: 95%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+span {
+    font-size: 12px;
+    color: rgb(61, 57, 57);
+}
+
+
+button[type="submit"] {
+    background-color: #929692;
+    color: white;
+    padding: 7px 3px;
+    border: none;
+    border-radius: 5px;
+    width: 20%;
+    margin-top: 490px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #888b88;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .for {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"] {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    button[type="submit"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
