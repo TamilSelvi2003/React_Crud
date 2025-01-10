@@ -1,8 +1,20 @@
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // Defaults to localStorage
 import { configureStore } from '@reduxjs/toolkit';
-import studentReducer from './userSlice';
+import userReducer from './userSlice';
 
-export const store = configureStore({
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, userReducer);
+
+const store = configureStore({
   reducer: {
-    students: studentReducer,
+    students: persistedReducer,
   },
 });
+
+export const persistor = persistStore(store);
+export default store;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteStudent } from '../../redux/userSlice';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import './user.css'
 
@@ -13,11 +14,14 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 5;
 
+
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this student?')) {
       dispatch(deleteStudent(id));
+      toast.success('Student deleted successfully!');
     }
   };
+  
 
   const handleSort = (field) => {
     setSortedField(field);
@@ -67,6 +71,7 @@ const Table = () => {
             <th onClick={() => handleSort('name')}>Name</th>
             <th onClick={() => handleSort('gender')}>Gender</th>
             <th>DOB</th>
+            <th>Profile</th>
             <th>Email</th>
             <th>City</th>
             <th>Contact</th>
@@ -74,34 +79,46 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {currentStudents.length === 0 ? (
-            <tr>
-              <td colSpan="7">No students available</td>
-            </tr>
+  {currentStudents.length === 0 ? (
+    <tr>
+      <td colSpan="8">No students available</td>
+    </tr>
+  ) : (
+    currentStudents.map((student) => (
+      <tr key={student.id}>
+        <td>{student.name}</td>
+        <td>{student.gender}</td>
+        <td>{student.dob}</td>
+        <td>
+          {student.image ? (
+            <img
+              src={student.image}
+              alt="Profile"
+              style={{ width: '50px', height: '50px', borderRadius: '50%' }}
+            />
           ) : (
-            currentStudents.map((student) => (
-              <tr key={student.id}>
-                <td>{student.name}</td>
-                <td>{student.gender}</td>
-                <td>{student.dob}</td>
-                <td>{student.email}</td>
-                <td>{student.city}</td>
-                <td>{student.contact}</td>
-                <td>
-                  <Link to={`/add/${student.id}`}>
-                    <FaEdit />
-                  </Link>
-                  <button onClick={() => handleDelete(student.id)}>
-                    <FaTrash />
-                  </button>
-                  <Link to={`/view/${student.id}`}>
-                    <FaEye />
-                  </Link>
-                </td>
-              </tr>
-            ))
+            'No Image'
           )}
-        </tbody>
+        </td>
+        <td>{student.email}</td>
+        <td>{student.city}</td>
+        <td>{student.contact}</td>
+        <td>
+          <Link to={`/add/${student.id}`}>
+            <FaEdit />
+          </Link>
+          <button onClick={() => handleDelete(student.id)}>
+            <FaTrash />
+          </button>
+          <Link to={`/view/${student.id}`}>
+            <FaEye />
+          </Link>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
       </table>
       <div>
         {Array.from(
@@ -111,6 +128,13 @@ const Table = () => {
               key={index}
               onClick={() => setCurrentPage(index + 1)}
               className={currentPage === index + 1 ? 'active' : ''}
+              style={{
+                padding: '10px',
+                border: 'none',
+                borderRadius: '5px',
+                float:'right',
+                margin: '10px 10px',
+              }}
             >
               {index + 1}
             </button>

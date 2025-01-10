@@ -27,7 +27,7 @@
 
 h2.addstd {
     text-align: center;
-    color: #4caf50;
+    color: #111;
     margin-bottom: 20px;
 }
 
@@ -79,7 +79,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #888b88;
+    background-color: #fff;
 }
 
 /* Responsive Design */

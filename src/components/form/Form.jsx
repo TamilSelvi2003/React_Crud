@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStudent, editStudent } from '../../redux/userSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './form.css';
 
 
@@ -10,11 +13,12 @@ const Form = () => {
     name: '',
     gender: '',
     dob: '',
+    image:'',
     email: '',
     contact: '',
     city: '',
   });
-
+  const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,6 +36,7 @@ const Form = () => {
     }
   }, [id, students, navigate]);
 
+
   const validate = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Name is required';
@@ -39,26 +44,32 @@ const Form = () => {
     if (!formData.contact || !/^\d{10}$/.test(formData.contact)) newErrors.contact = 'Valid 10-digit contact number is required';
     return newErrors;
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      toast.error('Please fix the errors.');
       return;
     }
+  
     const student = {
       id: id ? parseInt(id) : Date.now(),
       ...formData,
+      image: file ? URL.createObjectURL(file) : '', // Convert file to a URL
     };
+  
     if (id) {
       dispatch(editStudent(student));
+      toast.success('Student updated successfully!');
     } else {
       dispatch(addStudent(student));
+      toast.success('Student added successfully!');
     }
+  
     navigate('/');
   };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -66,6 +77,19 @@ const Form = () => {
       [name]: value,
     }));
   };
+
+
+
+const handleFileChange = (e) => {
+  const selectedFile = e.target.files[0];
+  const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'application/pdf'];
+  if (selectedFile && allowedTypes.includes(selectedFile.type)) {
+    setFile(selectedFile);
+  } else {
+    toast.error('Invalid file format. Only PDF, PNG, JPG, SVG, JPEG are allowed.');
+  }
+};
+
 
   return (
     <div className='for'>
@@ -97,6 +121,13 @@ const Form = () => {
         />
         <br />
         <input
+          type="file"
+           name="image"
+          accept=".pdf, .png, .jpg, .svg, .jpeg"
+          onChange={handleFileChange}
+        />
+        <br />
+        <input
           type="email"
           name="email"
           placeholder="Email"
@@ -105,6 +136,7 @@ const Form = () => {
         />
         {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
         <br />
+       
         <input
           type="text"
           name="contact"
